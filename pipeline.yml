@@ -1,0 +1,29 @@
+resources:
+- name: voting-app-repo
+  type: git
+  source:
+    uri: https://github.com/dimitar-panev/example-voting-app.git
+    branch: master
+
+jobs:
+- name: test-connection
+  public: true
+  plan:
+  - get: voting-app-repo
+    trigger: true
+  - task: list-files
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source: 
+          repository: alpine
+      inputs:
+      - name: voting-app-repo
+      run:
+        path: sh
+        args:
+        - -c
+        - |
+          echo "Repository successfully downloaded!"
+          ls -la voting-app-repo
